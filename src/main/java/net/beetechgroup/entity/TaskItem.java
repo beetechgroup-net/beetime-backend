@@ -8,9 +8,13 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import net.beetechgroup.resource.TaskItemInput;
+import net.beetechgroup.resource.TaskItemOutput;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class TaskItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -19,4 +23,17 @@ public class TaskItem {
     private LocalDateTime finishTime;
     @ManyToOne
     private Task task;
+
+    public TaskItem(TaskItemInput taskItemInput) {
+        this.startTime = taskItemInput.getStartTime();
+        this.finishTime = taskItemInput.getFinishTime();
+    }
+
+    public TaskItemOutput toOutput(){
+        TaskItemOutput taskItemOutput = new TaskItemOutput();
+        taskItemOutput.setId(this.id);
+        taskItemOutput.setStartTime(this.startTime);
+        taskItemOutput.setFinishTime(this.finishTime);
+        return taskItemOutput;
+    }
 }
