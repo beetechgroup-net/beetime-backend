@@ -1,4 +1,4 @@
-package net.beetechgroup.resource;
+package net.beetechgroup.resource.input;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.beetechgroup.resource.TaskItemInput;
-import net.beetechgroup.resource.TaskItemOutput;
+import net.beetechgroup.resource.input.TaskItemInput;
+import net.beetechgroup.resource.output.TaskItemOutput;
 
 @Data
 @Entity

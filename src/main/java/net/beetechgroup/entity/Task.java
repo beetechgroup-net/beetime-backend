@@ -10,13 +10,11 @@ import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.beetechgroup.resource.TaskInput;
-import net.beetechgroup.resource.TaskItemOutput;
-import net.beetechgroup.resource.TaskOutput;
+import net.beetechgroup.resource.input.TaskInput;
+import net.beetechgroup.resource.output.TaskItemOutput;
+import net.beetechgroup.resource.output.TaskOutput;
 
 @Data
 @NoArgsConstructor

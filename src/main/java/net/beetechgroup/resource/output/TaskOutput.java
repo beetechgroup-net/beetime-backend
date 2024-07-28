@@ -1,4 +1,4 @@
-package net.beetechgroup.resource;
+package net.beetechgroup.resource.output;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package net.beetechgroup.resource;
+package net.beetechgroup.resource.input;
 
 import java.util.List;
 import lombok.Data;
