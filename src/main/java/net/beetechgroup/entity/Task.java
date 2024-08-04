@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,10 +29,13 @@ public class Task {
     public void updateFromInput(TaskInput taskInput) {
         this.setDescription(taskInput.getDescription());
         this.setCategory(taskInput.getCategory());
-        this.setTaskItems(taskInput.getTaskItems().stream().map(TaskItem::new).toList());
+        if(Objects.nonNull(taskInput.getTaskItems())) {
+            this.setTaskItems(taskInput.getTaskItems().stream().map(TaskItem::new).toList());
+        }
     }
 
     public TaskOutput toOutput() {
-        return new TaskOutput(this.id, this.description, this.category, this.taskItems.stream().map(TaskItem::toOutput).toList());
+        List<TaskItem> items = this.taskItems;
+        return new TaskOutput(this.id, this.description, this.category, Objects.nonNull(items) ? items.stream().map(TaskItem::toOutput).toList() : null);
     }
 }

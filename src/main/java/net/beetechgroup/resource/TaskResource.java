@@ -13,16 +13,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import net.beetechgroup.entity.Task;
-import net.beetechgroup.repository.TaskRepository;
 import net.beetechgroup.resource.input.TaskInput;
-import net.beetechgroup.resource.output.TaskOutput;
 import net.beetechgroup.service.CreateTaskService;
 import net.beetechgroup.service.DeleteTaskByIdService;
 import net.beetechgroup.service.FindAllTaskService;
 import net.beetechgroup.service.FindTaskByIdService;
 import net.beetechgroup.service.UpdateTaskService;
 
-@Path("/task")
+@Path("/tasks")
 @ApplicationScoped
 public class TaskResource {
 
