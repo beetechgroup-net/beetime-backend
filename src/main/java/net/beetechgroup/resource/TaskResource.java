@@ -16,58 +16,64 @@ import net.beetechgroup.entity.Task;
 import net.beetechgroup.repository.TaskRepository;
 import net.beetechgroup.resource.input.TaskInput;
 import net.beetechgroup.resource.output.TaskOutput;
+import net.beetechgroup.service.CreateTaskService;
+import net.beetechgroup.service.DeleteTaskByIdService;
+import net.beetechgroup.service.FindAllTaskService;
+import net.beetechgroup.service.FindTaskByIdService;
+import net.beetechgroup.service.UpdateTaskService;
 
 @Path("/task")
 @ApplicationScoped
 public class TaskResource {
 
-    private final TaskRepository taskRepository;
+    private final CreateTaskService createTaskService;
+    private final UpdateTaskService updateTaskService;
+    private final FindAllTaskService findAllTaskService;
+    private final FindTaskByIdService findTaskByIdService;
+    private final DeleteTaskByIdService deleteTaskByIdService;
 
-    public TaskResource(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskResource(UpdateTaskService updateTaskService,
+            CreateTaskService createTaskService, FindAllTaskService findAllTaskService,
+            FindTaskByIdService findTaskByIdService, DeleteTaskByIdService deleteTaskByIdService) {
+        this.updateTaskService = updateTaskService;
+        this.createTaskService = createTaskService;
+        this.findAllTaskService = findAllTaskService;
+        this.findTaskByIdService = findTaskByIdService;
+        this.deleteTaskByIdService = deleteTaskByIdService;
     }
 
     @POST
     @Transactional
     public Response create(TaskInput taskInput) {
-        Task task = new Task(taskInput);
-        this.taskRepository.persist(task);
+        Task task = this.createTaskService.execute(taskInput);
         return Response.created(URI.create("/task/" + 1)).entity(task.toOutput()).build();
     }
 
     @GET
     public Response retrieveAll() {
-        List<Task> tasks = this.taskRepository.listAll();
-        List<TaskOutput> list = tasks.stream().map(Task::toOutput).toList();
-        return Response.ok(list).build();
+        List<Task> tasks = this.findAllTaskService.execute();
+        return Response.ok(tasks.stream().map(Task::toOutput).toList()).build();
     }
 
     @GET
     @Path("/{id}")
     public Response retrieveById(@PathParam("id") UUID id) {
-        Task task = this.taskRepository.findById(id);
-        TaskOutput output = task.toOutput();
-        return Response.ok(output).build();
+        Task task = this.findTaskByIdService.execute(id);
+        return Response.ok(task.toOutput()).build();
     }
 
     @PUT
     @Path("/{id}")
-    @Transactional
     public Response updateById(@PathParam("id") UUID id, TaskInput taskInput) {
-        Task task = new Task(taskInput);
-        task.setId(id);
+        Task task = this.updateTaskService.execute(id, taskInput);
         return Response.ok(task.toOutput()).build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteById(@PathParam("id") UUID id) {
-        Task task = this.taskRepository.findById(id);
-        if(Boolean.TRUE == this.taskRepository.deleteById(id)){
-            return Response.ok(task).build();
-        } else {
-            return Response.status(404).build();
-        }
+        Task task = this.deleteTaskByIdService.execute(id);
+        return Response.ok(task.toOutput()).build();
     }
 
 }
