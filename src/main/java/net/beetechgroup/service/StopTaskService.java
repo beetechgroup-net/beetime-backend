@@ -5,21 +5,20 @@ import jakarta.transaction.Transactional;
 import java.util.UUID;
 import net.beetechgroup.entity.Task;
 import net.beetechgroup.repository.TaskRepository;
-import net.beetechgroup.resource.input.TaskInput;
 
 @ApplicationScoped
-public class UpdateTaskService {
+public class StopTaskService {
 
     private final TaskRepository taskRepository;
 
-    public UpdateTaskService(TaskRepository taskRepository) {
+    public StopTaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
 
     @Transactional
-    public Task execute(UUID id, TaskInput taskInput){
+    public Task execute(UUID id){
         Task task = this.taskRepository.findById(id);
-        task.updateFromInput(taskInput);
+        task.stop();
         this.taskRepository.persistAndFlush(task);
         return task;
     }

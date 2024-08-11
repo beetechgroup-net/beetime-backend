@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum TaskStatus {
-    NOTSTARTED("Not Started"),
+    NOT_STARTED("Not Started"),
     STARTED("Started"),
-    FINISHED("Finished");
+    STOPPED("Stopped");
 
     private final String description;
 

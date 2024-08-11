@@ -13,28 +13,30 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import net.beetechgroup.entity.Task;
-import net.beetechgroup.resource.input.TaskInput;
 import net.beetechgroup.service.CreateTaskService;
 import net.beetechgroup.service.DeleteTaskByIdService;
 import net.beetechgroup.service.FindAllTaskService;
 import net.beetechgroup.service.FindTaskByIdService;
-import net.beetechgroup.service.UpdateTaskService;
+import net.beetechgroup.service.StartTaskService;
+import net.beetechgroup.service.StopTaskService;
 
 @Path("/tasks")
 @ApplicationScoped
 public class TaskResource {
 
     private final CreateTaskService createTaskService;
-    private final UpdateTaskService updateTaskService;
+    private final StartTaskService startTaskService;
+    private final StopTaskService stopTaskService;
     private final FindAllTaskService findAllTaskService;
     private final FindTaskByIdService findTaskByIdService;
     private final DeleteTaskByIdService deleteTaskByIdService;
 
-    public TaskResource(UpdateTaskService updateTaskService,
-            CreateTaskService createTaskService, FindAllTaskService findAllTaskService,
+    public TaskResource(CreateTaskService createTaskService, StartTaskService startTaskService,
+            StopTaskService stopTaskService, FindAllTaskService findAllTaskService,
             FindTaskByIdService findTaskByIdService, DeleteTaskByIdService deleteTaskByIdService) {
-        this.updateTaskService = updateTaskService;
+        this.startTaskService = startTaskService;
         this.createTaskService = createTaskService;
+        this.stopTaskService = stopTaskService;
         this.findAllTaskService = findAllTaskService;
         this.findTaskByIdService = findTaskByIdService;
         this.deleteTaskByIdService = deleteTaskByIdService;
@@ -42,36 +44,43 @@ public class TaskResource {
 
     @POST
     @Transactional
-    public Response create(TaskInput taskInput) {
-        Task task = this.createTaskService.execute(taskInput);
-        return Response.created(URI.create("/task/" + 1)).entity(task.toOutput()).build();
+    public Response create(Task task) {
+        Task created = this.createTaskService.execute(task);
+        return Response.created(URI.create("/task/" + 1)).entity(created).build();
     }
 
     @GET
     public Response retrieveAll() {
         List<Task> tasks = this.findAllTaskService.execute();
-        return Response.ok(tasks.stream().map(Task::toOutput).toList()).build();
+        return Response.ok(tasks).build();
     }
 
     @GET
     @Path("/{id}")
     public Response retrieveById(@PathParam("id") UUID id) {
         Task task = this.findTaskByIdService.execute(id);
-        return Response.ok(task.toOutput()).build();
+        return Response.ok(task).build();
     }
 
     @PUT
-    @Path("/{id}")
-    public Response updateById(@PathParam("id") UUID id, TaskInput taskInput) {
-        Task task = this.updateTaskService.execute(id, taskInput);
-        return Response.ok(task.toOutput()).build();
+    @Path("/{id}/start")
+    public Response start(@PathParam("id") UUID id) {
+        Task task = this.startTaskService.execute(id);
+        return Response.ok(task).build();
+    }
+
+    @PUT
+    @Path("/{id}/stop")
+    public Response stop(@PathParam("id") UUID id) {
+        Task task = this.stopTaskService.execute(id);
+        return Response.ok(task).build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteById(@PathParam("id") UUID id) {
         Task task = this.deleteTaskByIdService.execute(id);
-        return Response.ok(task.toOutput()).build();
+        return Response.ok(task).build();
     }
 
 }
