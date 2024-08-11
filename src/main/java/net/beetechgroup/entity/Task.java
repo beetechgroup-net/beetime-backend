@@ -21,6 +21,7 @@ public class Task {
     private String category;
     private TaskStatus status;
     private LocalDateTime startTime;
+    private LocalDateTime stopTime;
     private Long duration;
 
     public void create() {
@@ -35,7 +36,8 @@ public class Task {
 
     public void stop() {
         this.status = TaskStatus.STOPPED;
-        this.duration = duration + Duration.between(this.startTime, LocalDateTime.now()).toMillis();
+        this.stopTime = LocalDateTime.now();
+        this.duration = duration + Duration.between(this.startTime, this.stopTime).toMillis();
     }
 
 }
